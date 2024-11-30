@@ -5,7 +5,7 @@ echo -e "${COL}Setting up klipper + moonraker + fluidd"
 
 echo -e "${COL}\nInstalling dependencies...\n${NC}"
 # install required dependencies
-apk add nginx git
+apk add nginx git zlib-dev libjpeg-turbo-dev g++ nano
 
 nginx -t
 
@@ -14,7 +14,7 @@ python3 -m venv ~/moonraker-venv
 python3 -m venv ~/klipper-venv
 
 
-echo -e "${COL}\nDownloading moonraker, fluidd and klipper...\n${NC}"
+echo -e "${COL}\nDownloading moonraker, klipper, fluidd, fluidd-config, gcode_shell_command...\n${NC}"
 cd ~/
 git clone https://github.com/Arksine/moonraker.git
 git clone https://github.com/KevinOConnor/klipper
@@ -45,7 +45,7 @@ ln -sf ~/fluidd-config/fluidd.cfg ~/printer_data/config/fluidd.cfg
 
 
 echo -e "${COL}\nInserting configurations...\n${NC}"
-
+echo -e "${COL}\nMoonraker configs...\n${NC}"
 # Insert moonraker configs
 cat << EOF > ~/printer_data/config/moonraker.conf
 [server]
@@ -136,6 +136,7 @@ upstream mjpgstreamer4 {
 }
 EOF
 
+echo -e "${COL}\nNginx configs...\n${NC}"
 rm /etc/nginx/http.d/default.conf
 
 cat << EOF > /etc/nginx/http.d/fluidd.conf
@@ -235,6 +236,19 @@ server {
     }
 }
 EOF
+
+echo -e "${COL}\nExample printer.cfg...\n${NC}"
+
+cat << EOF > ~/printer_data/config/printer.cfg
+## APPEND YOUR PRINTER.CFG CONFIG BELOW THE LINE. THIS breaks if this is not included
+[include fluidd.cfg]
+[mcu]
+serial:/dev/ttyOcto4a
+## APPEND YOUR PRINTER.CFG CONFIG BELOW THE LINE. THIS breaks if this is not included
+## -----------------------------------------------------------------------------------
+EOF
+
+echo -e "${COL}\nOcto4a Extension configs...\n${NC}"
 
 mkdir -p /mnt/external/extensions/klipper_fluidd
 cat << EOF > /mnt/external/extensions/klipper_fluidd/manifest.json
