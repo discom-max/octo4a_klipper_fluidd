@@ -242,14 +242,25 @@ cat << EOF > /mnt/external/extensions/klipper_fluidd/manifest.json
 }
 EOF
 
+###cat << EOF > /mnt/external/extensions/klipper_fluidd/start.sh
+##!/bin/sh
+#KLIPPER_ARGS="/root/klipper/klippy/klippy.py /root/printer_data/config/printer.cfg -l /root/printer_data/logs/klippy.log -I /root/printer_data/comms/klippy.serial -a /root/printer_data/comms/klippy.sock"
+#MOONRAKER_ARGS="/root/moonraker/moonraker/moonraker.py -d /root/printer_data"
+#
+#nginx
+#/root/klipper-venv/bin/python \$KLIPPER_ARGS &
+#/root/moonraker-venv/bin/python \$MOONRAKER_ARGS
+###EOF
+
 cat << EOF > /mnt/external/extensions/klipper_fluidd/start.sh
 #!/bin/sh
-KLIPPER_ARGS="/root/klipper/klippy/klippy.py /root/printer_data/config/printer.cfg -l /root/printer_data/logs/klippy.log -I /root/printer_data/comms/klippy.serial -a /root/printer_data/comms/klippy.sock"
+
+KLIPPER_ARGS="/root/klipper/klippy/klippy.py /root/printer.cfg -l /root/printer_data/logs/klippy.log -I /root/printer_data/comms/klippy.serial -a /root/klipper-venv/bin/python"
 MOONRAKER_ARGS="/root/moonraker/moonraker/moonraker.py -d /root/printer_data"
 
 nginx
-/root/klipper-venv/bin/python \$KLIPPER_ARGS &
-/root/moonraker-venv/bin/python \$MOONRAKER_ARGS
+LD_PRELOAD=/home/octoprint/ioctl-hook.so /root/klipper-venv/bin/python $KLIPPER_ARGS &
+LD_PRELOAD=/home/octoprint/ioctl-hook.so /root/moonraker-venv/bin/python $MOONRAKER_ARGS
 EOF
 
 cat << EOF > /mnt/external/extensions/klipper_fluidd/kill.sh
