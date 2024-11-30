@@ -280,9 +280,6 @@ chmod +x /mnt/external/extensions/klipper_fluidd/kill.sh
 chmod 777 /mnt/external/extensions/klipper_fluidd/start.sh
 chmod 777 /mnt/external/extensions/klipper_fluidd/kill.sh
 
-cat << EOF
-${COL}
-Klipper installed!
-Fluidd should be accessible on port 2135
-Please kill the app and restart it again to see it in extension settings${NC}
-EOF
+echo -e "${COL}\nInstallation Done\n${NC}"
+echo -e "${COL}\nFluidd should be accessible on port 2135\n${NC}"
+echo -e "${COL}\nPlease kill the app and restart it again to see it in extension settings\n${NC}"
