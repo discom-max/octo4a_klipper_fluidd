@@ -31,6 +31,8 @@ git clone https://github.com/fluidd-core/fluidd-config.git
 ~/klipper-venv/bin/pip install -r ./klipper/scripts/klippy-requirements.txt
 ~/moonraker-venv/bin/pip install -r ./moonraker/scripts/moonraker-requirements.txt
 
+# downloading gcode_shell_comman.py
+wget -P ~/klipper/klippy/extras https://github.com/dw-0/kiauh/raw/refs/heads/master/resources/gcode_shell_command.py
 # Prepare necessary directories
 mkdir ~/printer_data/
 mkdir ~/printer_data/config
@@ -248,8 +250,8 @@ KLIPPER_ARGS="/root/klipper/klippy/klippy.py /root/printer_data/config/printer.c
 MOONRAKER_ARGS="/root/moonraker/moonraker/moonraker.py -d /root/printer_data"
 
 nginx
-LD_PRELOAD=/home/octoprint/ioctl-hook.so /root/klipper-venv/bin/python $KLIPPER_ARGS &
-LD_PRELOAD=/home/octoprint/ioctl-hook.so /root/moonraker-venv/bin/python $MOONRAKER_ARGS
+LD_PRELOAD=/home/octoprint/ioctl-hook.so /root/klipper-venv/bin/python \$KLIPPER_ARGS &
+LD_PRELOAD=/home/octoprint/ioctl-hook.so /root/moonraker-venv/bin/python \$MOONRAKER_ARGS
 EOF
 
 cat << EOF > /mnt/external/extensions/klipper_fluidd/kill.sh
