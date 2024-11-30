@@ -20,11 +20,13 @@ git clone https://github.com/Arksine/moonraker.git
 git clone https://github.com/KevinOConnor/klipper
 
 
-# Download fluidd
+# Download fluidd and fluidd-config
 mkdir ~/fluidd
 cd ~/fluidd
 wget -q -O fluidd.zip https://github.com/fluidd-core/fluidd/releases/latest/download/fluidd.zip && unzip fluidd.zip && rm fluidd.zip
 cd ~/
+git clone https://github.com/fluidd-core/fluidd-config.git
+
 
 ~/klipper-venv/bin/pip install -r ./klipper/scripts/klippy-requirements.txt
 ~/moonraker-venv/bin/pip install -r ./moonraker/scripts/moonraker-requirements.txt
@@ -37,6 +39,7 @@ mkdir ~/printer_data/gcodes
 mkdir ~/printer_data/systemd
 mkdir ~/printer_data/comms
 touch ~/printer_data/config/printer.cfg
+ln -sf ~/fluidd-config/fluidd.cfg ~/printer_data/config/fluidd.cfg
 
 
 echo -e "${COL}\nInserting configurations...\n${NC}"
@@ -90,6 +93,14 @@ type: web
 channel: stable
 repo: fluidd-core/fluidd
 path: ~/fluidd
+
+[update_manager fluidd-config]
+type: git_repo
+primary_branch: master
+path: ~/fluidd-config
+origin: https://github.com/fluidd-core/fluidd-config.git
+managed_services: klipper
+
 EOF
 
 mkdir -p /etc/nginx/conf.d/
