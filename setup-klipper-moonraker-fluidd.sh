@@ -5,7 +5,7 @@ echo -e "${COL}Setting up klipper + moonraker + fluidd"
 
 echo -e "${COL}\nInstalling dependencies...\n${NC}"
 # install required dependencies
-apk add nginx git zlib-dev libjpeg-turbo-dev g++ nano python3-dev build-base gcc
+apk add nginx git zlib-dev libjpeg-turbo-dev g++ nano python3-dev build-base gcc py3-cffi py3-greenlet linux-headers can-utils
 
 nginx -t
 
