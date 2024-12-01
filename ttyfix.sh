@@ -10,18 +10,6 @@ done
 
 echo "Using serial port ${serial_port}"
 
-if [ "$(id  -u)" = "0" ]
-then
-  echo "Start script as user!"
-  exit 1
-fi
-
-#if ! [[ -e "./klippy-env" && -e "./moonraker-env" && -e "./fluidd" && -e "./.KlipperScreen-env" ]]
-#then
-#  echo "First use kiauh to install the klipper family!"
-#  exit 1
-#fi
-
 if [ ! -c "$serial_port" ] 
 then
   echo "Please connect your phone to the printer "
@@ -55,13 +43,13 @@ apk add inotify-tools iw
 ### Configuration for power
 tee "$POWERFIX" <<EOF
 #!/bin/bash
-sudo unchroot dumpsys battery set status 2
-sudo unchroot dumpsys battery set level 98
-sudo unchroot dumpsys deviceidle disable >/dev/null 2>&1
-sudo iw wlan0 set power_save off
-sudo unchroot settings put global auto_time 0
+unchroot dumpsys battery set status 2
+unchroot dumpsys battery set level 98
+unchroot dumpsys deviceidle disable >/dev/null 2>&1
+iw wlan0 set power_save off
+unchroot settings put global auto_time 0
 sleep 1
-sudo unchroot settings put global auto_time 1
+unchroot settings put global auto_time 1
 EOF
 chmod +x "$POWERFIX"
 
@@ -89,7 +77,7 @@ tee "$TTYFIX" <<EOF
 inotifywait -m /dev -e create |
   while read dir action file
   do
-    [ "\$file" = "ttyACM0" ] && chmod 777 $serial_port
+    [ "\$file" = "ttyOcto4a" ] && chmod 777 $serial_port
   done
 EOF
 chmod +x "$TTYFIX"
