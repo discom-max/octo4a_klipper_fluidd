@@ -38,7 +38,7 @@ POWERFIX_START="/etc/init.d/powerfix"
 ### packages
 echo "Installing required packages"
 
-apk add inotify-tools iw
+apk add inotify-tools iw openrc
 
 ### Configuration for power
 tee "$POWERFIX" <<EOF
@@ -275,10 +275,10 @@ EOF
 chmod +x $ETC_INIT_MOONRAKER
 
 ### Configure autostart service
-update-rc.d ttyfix defaults 
-update-rc.d klipper defaults 
-update-rc.d moonraker defaults 
-update-rc.d powerfix defaults
+rc-update add ttyfix default
+rc-update add klipper default
+rc-update add moonraker default
+rc-update add powerfix default
 
 ### complete
 echo "Configuration complete , Please restart your phone!!!"
