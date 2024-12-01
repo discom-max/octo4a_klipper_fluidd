@@ -16,11 +16,11 @@ then
   exit 1
 fi
 
-if ! [[ -e "./klippy-env" && -e "./moonraker-env" && -e "./fluidd" && -e "./.KlipperScreen-env" ]]
-then
-  echo "First use kiauh to install the klipper family!"
-  exit 1
-fi
+#if ! [[ -e "./klippy-env" && -e "./moonraker-env" && -e "./fluidd" && -e "./.KlipperScreen-env" ]]
+#then
+#  echo "First use kiauh to install the klipper family!"
+#  exit 1
+#fi
 
 if [ ! -c "$serial_port" ] 
 then
