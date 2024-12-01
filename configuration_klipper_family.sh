@@ -82,20 +82,7 @@ exit 0
 EOF
 chmod +x "$POWERFIX_START"
 
-### Configuration for Klipperscreen_xterm
-tee "$USR_LOCAL_BIN_XTERM" <<EOF
-#!/bin/bash
-# Configuration for Klipperscreen_xterm
-
-KLIPPERSCREEN_CONFIG=/home/$KLIPPER_USER/KlipperScreen.conf
-KLIPPERSCREEN_LOG=/home/$KLIPPER_USER/printer_data/logs/KlipperScreen.log
-sudo unchroot am start -n x.org.server/x.org.server.MainActivity >/dev/null 2>&1
-sleep 10
-/home/$KLIPPER_USER/.KlipperScreen-env/bin/python /home/$KLIPPER_USER/KlipperScreen/screen.py -c \$KLIPPERSCREEN_CONFIG -l \$KLIPPERSCREEN_LOG
-EOF
-chmod +x $USR_LOCAL_BIN_XTERM
-
-### Configuration for ttyACM0
+### Configuration for ttyOcto4a
 tee "$TTYFIX" <<EOF
 #!/bin/bash
 
@@ -162,22 +149,22 @@ chmod +x "$TTYFIX_START"
 
 ### Configuration for /etc/init.d/klipper
 tee "$ETC_DEFAULT_KLIPPER" <<EOF
-KLIPPY_CONFIG="/home/$KLIPPER_USER/printer_data/config/printer.cfg"
-KLIPPY_LOG="/home/$KLIPPER_USER/printer_data/logs/klippy.log"
-KLIPPY_SOCKET="/home/$KLIPPER_USER/printer_data/comms/klippy.sock"
+KLIPPY_CONFIG="/root/printer_data/config/printer.cfg"
+KLIPPY_LOG="/root/printer_data/logs/klippy.log"
+KLIPPY_SOCKET="/root/printer_data/comms/klippy.sock"
 KLIPPY_PRINTER=/tmp/printer
-KLIPPY_EXEC="/home/$KLIPPER_USER/klippy-env/bin/python"
-KLIPPY_ARGS="/home/$KLIPPER_USER/klipper/klippy/klippy.py \$KLIPPY_CONFIG -l \$KLIPPY_LOG -a \$KLIPPY_SOCKET"
+KLIPPY_EXEC="/root/klippy-env/bin/python"
+KLIPPY_ARGS="/root/klipper/klippy/klippy.py \$KLIPPY_CONFIG -l \$KLIPPY_LOG -a \$KLIPPY_SOCKET"
 EOF
 
 ### Configuration for /etc/init.d/moonraker
 tee "$ETC_DEFAULT_MOONRAKER" <<EOF
-MOONRAKER_CONFIG="/home/$KLIPPER_USER/printer_data/config/moonraker.conf"
-MOONRAKER_LOG="/home/$KLIPPER_USER/printer_data/logs/moonraker.log"
+MOONRAKER_CONFIG="/root/printer_data/config/moonraker.conf"
+MOONRAKER_LOG="/root/printer_data/logs/moonraker.log"
 MOONRAKER_SOCKET=/tmp/moonraker_uds
 MOONRAKER_PRINTER=/tmp/printer
-MOONRAKER_EXEC="/home/$KLIPPER_USER/moonraker-env/bin/python"
-MOONRAKER_ARGS="/home/$KLIPPER_USER/moonraker/moonraker/moonraker.py -c \$MOONRAKER_CONFIG -l \$MOONRAKER_LOG"
+MOONRAKER_EXEC="/root/moonraker-env/bin/python"
+MOONRAKER_ARGS="/root/moonraker/moonraker/moonraker.py -c \$MOONRAKER_CONFIG -l \$MOONRAKER_LOG"
 EOF
 
 ### System startup script for Klipper 3d-printer host code
