@@ -50,7 +50,7 @@ POWERFIX_START="/etc/init.d/powerfix"
 ### packages
 echo "Installing required packages"
 
-apk add -y inotify-tools fonts-wqy-zenhei iw
+apk add inotify-tools iw
 
 ### Configuration for power
 tee "$POWERFIX" <<EOF
