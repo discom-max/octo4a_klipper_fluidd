@@ -1,6 +1,6 @@
 #!/bin/bash
 
-serial_port="/dev/ttyACM0"
+serial_port="/dev/ttyOcto4a"
 while getopts p: flag
 do
     case "${flag}" in
@@ -50,10 +50,10 @@ POWERFIX_START="/etc/init.d/powerfix"
 ### packages
 echo "Installing required packages"
 
-sudo apt install -y inotify-tools fonts-wqy-zenhei iw
+apk add -y inotify-tools fonts-wqy-zenhei iw
 
 ### Configuration for power
-sudo tee "$POWERFIX" <<EOF
+tee "$POWERFIX" <<EOF
 #!/bin/bash
 sudo unchroot dumpsys battery set status 2
 sudo unchroot dumpsys battery set level 98
@@ -63,9 +63,9 @@ sudo unchroot settings put global auto_time 0
 sleep 1
 sudo unchroot settings put global auto_time 1
 EOF
-sudo chmod +x "$POWERFIX"
+chmod +x "$POWERFIX"
 
-sudo tee "$POWERFIX_START" <<EOF
+tee "$POWERFIX_START" <<EOF
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          powerfix
@@ -80,10 +80,10 @@ $POWERFIX
 
 exit 0
 EOF
-sudo chmod +x "$POWERFIX_START"
+chmod +x "$POWERFIX_START"
 
 ### Configuration for Klipperscreen_xterm
-sudo tee "$USR_LOCAL_BIN_XTERM" <<EOF
+tee "$USR_LOCAL_BIN_XTERM" <<EOF
 #!/bin/bash
 # Configuration for Klipperscreen_xterm
 
@@ -93,10 +93,10 @@ sudo unchroot am start -n x.org.server/x.org.server.MainActivity >/dev/null 2>&1
 sleep 10
 /home/$KLIPPER_USER/.KlipperScreen-env/bin/python /home/$KLIPPER_USER/KlipperScreen/screen.py -c \$KLIPPERSCREEN_CONFIG -l \$KLIPPERSCREEN_LOG
 EOF
-sudo chmod +x $USR_LOCAL_BIN_XTERM
+chmod +x $USR_LOCAL_BIN_XTERM
 
 ### Configuration for ttyACM0
-sudo tee "$TTYFIX" <<EOF
+tee "$TTYFIX" <<EOF
 #!/bin/bash
 
 inotifywait -m /dev -e create |
@@ -105,9 +105,9 @@ inotifywait -m /dev -e create |
     [ "\$file" = "ttyACM0" ] && chmod 777 $serial_port
   done
 EOF
-sudo chmod +x "$TTYFIX"
+chmod +x "$TTYFIX"
 
-sudo tee "$TTYFIX_START" <<EOF
+tee "$TTYFIX_START" <<EOF
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          ttyfix
@@ -158,10 +158,10 @@ esac
 
 exit 0
 EOF
-sudo chmod +x "$TTYFIX_START"
+chmod +x "$TTYFIX_START"
 
 ### Configuration for /etc/init.d/klipper
-sudo tee "$ETC_DEFAULT_KLIPPER" <<EOF
+tee "$ETC_DEFAULT_KLIPPER" <<EOF
 KLIPPY_CONFIG="/home/$KLIPPER_USER/printer_data/config/printer.cfg"
 KLIPPY_LOG="/home/$KLIPPER_USER/printer_data/logs/klippy.log"
 KLIPPY_SOCKET="/home/$KLIPPER_USER/printer_data/comms/klippy.sock"
@@ -171,7 +171,7 @@ KLIPPY_ARGS="/home/$KLIPPER_USER/klipper/klippy/klippy.py \$KLIPPY_CONFIG -l \$K
 EOF
 
 ### Configuration for /etc/init.d/moonraker
-sudo tee "$ETC_DEFAULT_MOONRAKER" <<EOF
+tee "$ETC_DEFAULT_MOONRAKER" <<EOF
 MOONRAKER_CONFIG="/home/$KLIPPER_USER/printer_data/config/moonraker.conf"
 MOONRAKER_LOG="/home/$KLIPPER_USER/printer_data/logs/moonraker.log"
 MOONRAKER_SOCKET=/tmp/moonraker_uds
@@ -181,7 +181,7 @@ MOONRAKER_ARGS="/home/$KLIPPER_USER/moonraker/moonraker/moonraker.py -c \$MOONRA
 EOF
 
 ### System startup script for Klipper 3d-printer host code
-sudo tee "$ETC_INIT_KLIPPER" <<EOF
+tee "$ETC_INIT_KLIPPER" <<EOF
 #!/bin/sh
 # System startup script for Klipper 3d-printer host code
 
@@ -237,10 +237,10 @@ status)
 esac
 exit 0
 EOF
-sudo chmod +x "$ETC_INIT_KLIPPER"
+chmod +x "$ETC_INIT_KLIPPER"
 
 ### System startup script for Moonraker API for Klipper
-sudo tee "$ETC_INIT_MOONRAKER" <<EOF
+tee "$ETC_INIT_MOONRAKER" <<EOF
 #!/bin/sh
 # System startup script for Moonraker API for Klipper
 
@@ -297,13 +297,13 @@ esac
 exit 0
 EOF
 
-sudo chmod +x $ETC_INIT_MOONRAKER
+chmod +x $ETC_INIT_MOONRAKER
 
 ### Configure autostart service
-sudo update-rc.d ttyfix defaults 
-sudo update-rc.d klipper defaults 
-sudo update-rc.d moonraker defaults 
-sudo update-rc.d powerfix defaults
+update-rc.d ttyfix defaults 
+update-rc.d klipper defaults 
+update-rc.d moonraker defaults 
+update-rc.d powerfix defaults
 
 ### complete
 echo "Configuration complete , Please restart your phone!!!"
